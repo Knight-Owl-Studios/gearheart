@@ -30,7 +30,7 @@ fn spin(
             name,
         );
         
-        if name.as_str() == "RotationCylinder" || name.as_str() == "BoltBarrel" || name.as_str() == "PressureTankBottom" || name.as_str() == "PressureTankTop" || name.as_str() == "Roof" || name.as_str() == "Tower" { // Replace with your object's name
+        if name.as_str() == "RotationCylinder" { // Replace with your object's name
             transform.rotate_y(0.5 * time.delta_seconds()); // Adjust rotation as needed
         }
     }
