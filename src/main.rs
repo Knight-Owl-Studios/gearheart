@@ -11,7 +11,7 @@ use debug::DebugPlugin;
 fn main() {
     App::new()
     // Bevy built-ins.
-    .insert_resource(ClearColor(Color::rgb(0.1, 0.0, 0.15)))
+    .insert_resource(ClearColor(Color::rgb(0.0, 0.0, 0.15)))
     .insert_resource(AmbientLight {
         color: Color::default(),
         brightness: 50.0,
@@ -19,7 +19,7 @@ fn main() {
     .add_plugins(DefaultPlugins)
     .add_plugins(BoltTowerPlugin)
     .add_plugins(CameraPlugin)
-    .add_plugins(DebugPlugin)
+    // .add_plugins(DebugPlugin)
     .add_systems(Startup, setup)
     .run();
 }
