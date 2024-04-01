@@ -28,11 +28,11 @@ fn in_range(
     // loop through all minions and and check if they are in range of any towers
     for (minion_transform, entity) in minions_query.iter() {
         for (tower_transform, mut in_range, range) in towers_query.iter_mut() {
-             in_range.entities.clear();
-            let distance = minion_transform.translation.distance(tower_transform.translation);
-            if distance >= range.min && distance <= range.max && !in_range.entities.contains(&entity){
-              in_range.entities.push(entity);
-            }
+          in_range.entities.clear();
+          let distance = minion_transform.translation.distance(tower_transform.translation);
+          if distance >= range.min && distance <= range.max && !in_range.entities.contains(&entity){
+            in_range.entities.push(entity);
+          }
         }
     }
 }

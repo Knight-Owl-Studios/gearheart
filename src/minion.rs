@@ -86,15 +86,11 @@ fn move_minion(
     mut minion_query: Query<(&Minion, &Transform, &mut Velocity)>,
 ) {
     for (minion, transform, mut velocity) in minion_query.iter_mut() {
-        info!("Minion: {:?}", minion);
         // move minion closer to path target
         if let Some(path_target) = minion.path_target {
             let direction = path_target - transform.translation;
-            info!("Direction: {:?}", direction);
             let distance = direction.length();
             let direction = direction.normalize();
-            info!("Distance: {:?}", distance);
-            info!("Direction: {:?}", direction);
             if distance > 0.1 {
                 velocity.value = direction * minion.speed;
             } else {

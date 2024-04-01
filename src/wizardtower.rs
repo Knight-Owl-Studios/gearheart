@@ -41,8 +41,9 @@ fn spawn_tower(mut commands: Commands, asset_server: Res<AssetServer>) {
                 transform: Transform::from_translation(STARTING_TRANSLATION),
                 ..default()
             },
-            range: Range { min: 0.0, max: 30.0 },
+            range: Range { min: 0.0, max: 6.0 },
             targeting: Targeting { target: None },
+            ..Default::default()
         },
         WizardTower {},
     ));
@@ -54,8 +55,9 @@ fn spawn_tower(mut commands: Commands, asset_server: Res<AssetServer>) {
                 transform: Transform::from_translation(STARTING_TRANSLATION_2),
                 ..default()
             },
-            range: Range { min: 0.0, max: 30.0 },
+            range: Range { min: 0.0, max: 6.0 },
             targeting: Targeting { target: None },
+            ..Default::default()
         },
         WizardTower {},
     ));

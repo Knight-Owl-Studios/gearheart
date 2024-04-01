@@ -5,7 +5,7 @@ const STARTING_TRANSLATION: Vec3 = Vec3::new(-6.1691093, -1.1100681, -7.9348316)
 const STARTING_TRANSLATION_2: Vec3 = Vec3::new(6.4087896, -1.1100681, -7.9131517);
 
 #[derive(Component)]
-pub struct BoltTower {}
+pub struct BoltTower;
 
 pub struct BoltTowerPlugin;
 
@@ -41,10 +41,11 @@ fn spawn_tower(mut commands: Commands, asset_server: Res<AssetServer>) {
                 transform: Transform::from_translation(STARTING_TRANSLATION),
                 ..default()
             },
-            range: Range { min: 0.0, max: 30.0 },
+            range: Range { min: 0.0, max: 10.0 },
             targeting: Targeting { target: None },
+            ..Default::default()
         },
-        BoltTower {},
+        BoltTower,
     ));
     commands.spawn((
         TowerBundle {
@@ -53,8 +54,9 @@ fn spawn_tower(mut commands: Commands, asset_server: Res<AssetServer>) {
                 transform: Transform::from_translation(STARTING_TRANSLATION_2),
                 ..default()
             },
-            range: Range { min: 0.0, max: 30.0 },
+            range: Range { min: 0.0, max: 10.0 },
             targeting: Targeting { target: None },
+            ..Default::default()
         },
         BoltTower {},
     ));
