@@ -1,5 +1,7 @@
 use bevy::prelude::*;
 
+use crate::dragon::Dragon;
+
 pub struct DebugPlugin;
 
 impl Plugin for DebugPlugin {
@@ -8,7 +10,7 @@ impl Plugin for DebugPlugin {
     }
 }
 
-fn print_position(query: Query<(Entity, &Transform)>) {
+fn print_position(query: Query<(Entity, &Transform), With<Dragon>>) {
     // Log the entity ID and translation of each entity with a `Position` component.
     for (entity, transform) in query.iter() {
         info!(
