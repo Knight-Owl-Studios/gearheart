@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::ammunition::{Damage, DamageEvent};
+use crate::ammunition::DamageEvent;
 
 #[derive(Component, Debug)]
 pub struct Health {
@@ -14,7 +14,6 @@ pub struct HealthPlugin;
 impl Plugin for HealthPlugin {
     fn build(&self, app: &mut App) {
         app
-        .add_event::<DamageEvent>()
         .add_systems(Update, apply_damage);
     }
 }

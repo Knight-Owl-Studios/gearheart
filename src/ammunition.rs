@@ -1,5 +1,7 @@
 use bevy::prelude::*;
 
+use crate::movement::ArrivedEvent;
+
 #[derive(Component, Debug)]
 pub struct RateOfFire {
   pub timer: Timer,
@@ -43,4 +45,30 @@ pub struct Ammunition {
   pub damage: Damage,
   pub scene: Handle<Scene>,
   pub speed: f32
+}
+#[derive(Component, Debug)]
+pub struct Ammo; // Marker
+
+pub struct AmmunitionPlugin;
+
+impl Plugin for AmmunitionPlugin {
+    fn build(&self, app: &mut App) {
+        app
+          .add_event::<DamageEvent>()
+          .add_systems(Update, despawn_ammunition);
+    }
+}
+
+
+fn despawn_ammunition(
+    mut commands: Commands,
+    query: Query<(Entity), With<Ammo>>,
+    mut event_reader: EventReader<ArrivedEvent>,
+) {
+    for &ArrivedEvent { entity } in event_reader.read() {
+      // despawn entitiy when it arrives at its target. Make sure its ammunition by passing the query
+      if query.get(entity).is_ok() {
+        commands.entity(entity).despawn_recursive();
+      }
+    }
 }

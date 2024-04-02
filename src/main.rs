@@ -13,6 +13,7 @@ mod tower;
 mod wizardtower;
 
 use bevy::prelude::*;
+use ammunition::AmmunitionPlugin;
 use bolttower::BoltTowerPlugin;
 use camera::CameraPlugin;
 use debug::DebugPlugin;
@@ -34,6 +35,7 @@ fn main() {
         color: Color::default(),
         brightness: 50.0,
     })
+    .add_plugins(AmmunitionPlugin)
     .add_plugins(DefaultPlugins)
     .add_plugins(BoltTowerPlugin)
     .add_plugins(CameraPlugin)

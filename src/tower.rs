@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{ammunition::{Ammunition, Damage, DamageEvent, RateOfFire}, movement::Tracking, range::{InRange, Range}, targeting::Targeting};
+use crate::{ammunition::{Ammo, Ammunition, Damage, RateOfFire}, movement::Tracking, range::{InRange, Range}, targeting::Targeting};
 
 #[derive(Component)]
 pub struct Tower;
@@ -28,8 +28,6 @@ impl Plugin for TowerPlugin {
 fn fire_ze_missiles(
     mut commands: Commands,
     mut fireable_query: Query<(&mut RateOfFire, &Targeting, &Ammunition, &Transform), With<Tower>>,
-    target_query: Query<&Transform, Without<Tower>>,
-    mut event_writer: EventWriter<DamageEvent>,
     time: Res<Time>,
 ) {
     for (mut rate_of_fire, target, ammo, transform) in fireable_query.iter_mut() {
@@ -45,6 +43,7 @@ fn fire_ze_missiles(
                     },
                     Tracking { target, speed: ammo.speed },
                     Damage { amount: ammo.damage.amount, damage_type: ammo.damage.damage_type },
+                    Ammo,
                 ));
             }
         } else {

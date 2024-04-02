@@ -76,7 +76,6 @@ impl ArrivedEvent {
 }
 
 fn move_to_target(
-    mut commands: Commands,
     mut query: Query<(&Tracking, &mut Transform, Entity), Without<Minion>>,
     target: Query<&Transform, With<Minion>>,
     time: Res<Time>,
@@ -90,7 +89,6 @@ fn move_to_target(
 
         if distance < 0.1 {
             event_writer.send(ArrivedEvent::new(entity));
-            commands.entity(entity).despawn_recursive();
             continue;
         }
 
