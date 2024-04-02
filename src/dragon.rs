@@ -45,7 +45,6 @@ fn setup_scene_once_loaded(
   mut players: Query<&mut AnimationPlayer, Added<AnimationPlayer>>,
 ) {
   for mut player in &mut players {
-      player.play(animations.fly.clone_weak()).repeat();
+      player.play(animations.fly.clone_weak()).repeat();    
   }
 }
-

@@ -1,11 +1,12 @@
 use bevy::prelude::*;
-use crate::{range::Range, targeting::Targeting, tower::TowerBundle};
+use std::time::Duration;
+use crate::{ammunition::{Ammunition, Damage, DamageType, RateOfFire}, range::{InRange, Range}, targeting::Targeting, tower::{Tower, TowerBundle}};
 
 const STARTING_TRANSLATION: Vec3 = Vec3::new(6.507063, -1.3359288, 9.231256);
 const STARTING_TRANSLATION_2: Vec3 = Vec3::new(-5.943249, -1.3359288, 9.456453);
 
 #[derive(Component)]
-pub struct WizardTower {}
+pub struct WizardTower;
 
 pub struct WizardTowerPlugin;
 
@@ -43,9 +44,19 @@ fn spawn_tower(mut commands: Commands, asset_server: Res<AssetServer>) {
             },
             range: Range { min: 0.0, max: 6.0 },
             targeting: Targeting { target: None },
-            ..Default::default()
+            ammunition: Ammunition {
+                damage: Damage {
+                    amount: 1,
+                    damage_type: DamageType::Fire,
+                },
+                scene: asset_server.load("fireball.glb#Scene0"),
+                speed: 20.0,
+            },
+            tower: Tower,
+            rate_of_fire: RateOfFire { timer: Timer::new(Duration::from_secs_f32(0.5), TimerMode::Repeating)},
+            in_range: InRange { entities: Vec::new() },
         },
-        WizardTower {},
+        WizardTower,
     ));
     
     commands.spawn((
@@ -57,9 +68,19 @@ fn spawn_tower(mut commands: Commands, asset_server: Res<AssetServer>) {
             },
             range: Range { min: 0.0, max: 6.0 },
             targeting: Targeting { target: None },
-            ..Default::default()
+            ammunition: Ammunition {
+                damage: Damage {
+                    amount: 1,
+                    damage_type: DamageType::Fire,
+                },
+                scene: asset_server.load("fireball.glb#Scene0"),
+                speed: 20.0,
+            },
+            tower: Tower,
+            rate_of_fire: RateOfFire { timer: Timer::new(Duration::from_secs_f32(0.5), TimerMode::Repeating)},
+            in_range: InRange { entities: Vec::new() },
         },
-        WizardTower {},
+        WizardTower,
     ));
 
 }

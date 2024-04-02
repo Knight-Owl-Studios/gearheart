@@ -1,26 +1,30 @@
+mod ammunition;
 mod bolttower;
-mod wizardtower;
 mod camera;
 mod debug;
 mod dragon;
-mod movement;
-mod tower;
-mod targeting;
-mod minion;
-mod range;
+mod health;
 mod map;
+mod minion;
+mod movement;
+mod range;
+mod targeting;
+mod tower;
+mod wizardtower;
 
 use bevy::prelude::*;
 use bolttower::BoltTowerPlugin;
-use wizardtower::WizardTowerPlugin;
 use camera::CameraPlugin;
 use debug::DebugPlugin;
 use dragon::DragonPlugin;
-use targeting::TargetingPlugin;
-use movement::MovementPlugin;
-use minion::MinionPlugin;
-use range::RangePlugin;
+use health::HealthPlugin;
 use map::MapPlugin;
+use minion::MinionPlugin;
+use movement::MovementPlugin;
+use range::RangePlugin;
+use targeting::TargetingPlugin;
+use tower::TowerPlugin;
+use wizardtower::WizardTowerPlugin;
 
 fn main() {
     App::new()
@@ -34,10 +38,12 @@ fn main() {
     .add_plugins(BoltTowerPlugin)
     .add_plugins(CameraPlugin)
     .add_plugins(DragonPlugin)
+    .add_plugins(HealthPlugin)
     .add_plugins(WizardTowerPlugin)
     .add_plugins(MovementPlugin)
     .add_plugins(MinionPlugin)
     .add_plugins(TargetingPlugin)
+    .add_plugins(TowerPlugin)
     .add_plugins(RangePlugin)
     .add_plugins(MapPlugin)
     .add_plugins(DebugPlugin)

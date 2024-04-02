@@ -83,9 +83,9 @@ fn choose_path_target(path: Option<Res<Path>>, mut minion_query: Query<(&mut Min
 }
 
 fn move_minion(
-    mut minion_query: Query<(&Minion, &Transform, &mut Velocity)>,
+    mut minion_query: Query<(&Minion, &mut Transform, &mut Velocity)>,
 ) {
-    for (minion, transform, mut velocity) in minion_query.iter_mut() {
+    for (minion, mut transform, mut velocity) in minion_query.iter_mut() {
         // move minion closer to path target
         if let Some(path_target) = minion.path_target {
             let direction = path_target - transform.translation;
@@ -95,6 +95,11 @@ fn move_minion(
                 velocity.value = direction * minion.speed;
             } else {
                 velocity.value = Vec3::ZERO;
+            }
+
+            // ensure minion faces the right way
+            if direction != Vec3::ZERO {
+                transform.rotation = Quat::from_rotation_y(direction.x.atan2(direction.z));
             }
         }
     }

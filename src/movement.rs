@@ -1,5 +1,7 @@
 use bevy::prelude::*;
 
+use crate::minion::Minion;
+
 #[derive(Component, Debug)]
 pub struct Velocity {
     pub value: Vec3,
@@ -14,6 +16,12 @@ impl Default for Velocity {
     fn default() -> Self {
         Self { value: Vec3::ZERO }
     }
+}
+
+#[derive(Component, Debug)]
+pub struct Tracking {
+  pub target: Entity,
+  pub speed: f32,
 }
 
 #[derive(Component, Debug)]
@@ -50,9 +58,44 @@ impl Plugin for MovementPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(
             Update,
-            (update_velocity, update_position)
+            (update_velocity, update_position, move_to_target)
                 .chain()
-        );
+        ).add_event::<ArrivedEvent>();
+    }
+}
+
+#[derive(Event, Debug)]
+pub struct ArrivedEvent {
+    pub entity: Entity,
+}
+
+impl ArrivedEvent {
+    pub fn new(entity: Entity) -> Self {
+        Self { entity }
+    }
+}
+
+fn move_to_target(
+    mut commands: Commands,
+    mut query: Query<(&Tracking, &mut Transform, Entity), Without<Minion>>,
+    target: Query<&Transform, With<Minion>>,
+    time: Res<Time>,
+    mut event_writer: EventWriter<ArrivedEvent>,
+) {
+    for (tracking, mut transform, entity) in query.iter_mut() {
+        let target_transform = target.get(tracking.target).unwrap();
+        let direction = target_transform.translation - transform.translation;
+        let distance = direction.length();
+        let direction = direction.normalize();
+
+        if distance < 0.1 {
+            event_writer.send(ArrivedEvent::new(entity));
+            commands.entity(entity).despawn_recursive();
+            continue;
+        }
+
+        transform.translation += direction * tracking.speed * time.delta_seconds();
+        transform.look_at(target_transform.translation, Vec3::Y);
     }
 }
 
