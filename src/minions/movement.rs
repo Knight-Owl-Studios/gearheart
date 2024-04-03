@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::minion::Minion;
+use crate::{minions::Minion, states::MyStates};
 
 #[derive(Component, Debug)]
 pub struct Velocity {
@@ -20,8 +20,8 @@ impl Default for Velocity {
 
 #[derive(Component, Debug)]
 pub struct Tracking {
-  pub target: Entity,
-  pub speed: f32,
+    pub target: Entity,
+    pub speed: f32,
 }
 
 #[derive(Component, Debug)]
@@ -44,7 +44,7 @@ pub struct MovementBundle {
 impl Default for MovementBundle {
     fn default() -> Self {
         Self {
-            velocity: Velocity { value: Vec3::ZERO},
+            velocity: Velocity { value: Vec3::ZERO },
             acceleration: Acceleration { value: Vec3::ZERO },
         }
     }
@@ -60,7 +60,9 @@ impl Plugin for MovementPlugin {
             Update,
             (update_velocity, update_position, move_to_target)
                 .chain()
-        ).add_event::<ArrivedEvent>();
+                .run_if(in_state(MyStates::Game)),
+        )
+        .add_event::<ArrivedEvent>();
     }
 }
 

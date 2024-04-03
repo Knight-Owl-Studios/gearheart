@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::dragon::Dragon;
+use crate::minions::dragon::Dragon;
 
 pub struct DebugPlugin;
 

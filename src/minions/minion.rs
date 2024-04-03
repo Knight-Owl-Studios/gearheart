@@ -1,7 +1,11 @@
 use bevy::prelude::*;
-use crate::{map::Path, movement::{MovementBundle, Velocity}};
 
-#[derive(Component, Debug, )]
+use crate::map::Path;
+use crate::minions::health::Health;
+use crate::minions::movement::{MovementBundle, Velocity};
+use crate::states::MyStates;
+
+#[derive(Component, Debug)]
 pub struct Minion {
     pub minion_type: TargetType,
     pub path_target: Option<Vec3>,
@@ -30,6 +34,7 @@ pub struct MinionBundle {
     pub minion: Minion,
     pub movement: MovementBundle,
     pub model: SceneBundle,
+    pub health: Health,
 }
 
 impl Default for MinionBundle {
@@ -40,6 +45,10 @@ impl Default for MinionBundle {
             model: SceneBundle {
                 ..Default::default()
             },
+            health: Health {
+                max: 100,
+                current: 100,
+            },
         }
     }
 }
@@ -48,7 +57,10 @@ pub struct MinionPlugin;
 
 impl Plugin for MinionPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, (choose_path_target, move_minion));
+        app.add_systems(
+            Update,
+            (choose_path_target, move_minion).run_if(in_state(MyStates::Game)),
+        );
     }
 }
 
@@ -68,7 +80,10 @@ fn choose_path_target(path: Option<Res<Path>>, mut minion_query: Query<(&mut Min
         // if minion arrive at point, set next point as target
         if transform.translation.distance(minion.path_target.unwrap()) < 0.1 {
             // find current point index and set point at index + 1 as path_target
-            let current_point_index = path.points.iter().position(|&point| point == minion.path_target.unwrap());
+            let current_point_index = path
+                .points
+                .iter()
+                .position(|&point| point == minion.path_target.unwrap());
             let next_point = path.points.get(current_point_index.unwrap() + 1);
 
             if let Some(next_point) = next_point {
@@ -82,9 +97,7 @@ fn choose_path_target(path: Option<Res<Path>>, mut minion_query: Query<(&mut Min
     }
 }
 
-fn move_minion(
-    mut minion_query: Query<(&Minion, &mut Transform, &mut Velocity)>,
-) {
+fn move_minion(mut minion_query: Query<(&Minion, &mut Transform, &mut Velocity)>) {
     for (minion, mut transform, mut velocity) in minion_query.iter_mut() {
         // move minion closer to path target
         if let Some(path_target) = minion.path_target {

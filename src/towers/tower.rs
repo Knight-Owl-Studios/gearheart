@@ -1,6 +1,10 @@
 use bevy::prelude::*;
 
-use crate::{ammunition::{Ammo, Ammunition, Damage, RateOfFire}, movement::Tracking, range::{InRange, Range}, targeting::Targeting};
+use crate::minions::movement::Tracking;
+use crate::states::MyStates;
+use crate::towers::ammunition::{Ammo, Ammunition, Damage, RateOfFire};
+use crate::towers::range::{InRange, Range};
+use crate::towers::targeting::Targeting;
 
 #[derive(Component)]
 pub struct Tower;
@@ -20,10 +24,9 @@ pub struct TowerPlugin;
 
 impl Plugin for TowerPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, fire_ze_missiles);
+        app.add_systems(Update, fire_ze_missiles.run_if(in_state(MyStates::Game)));
     }
 }
-
 
 fn fire_ze_missiles(
     mut commands: Commands,
@@ -41,8 +44,14 @@ fn fire_ze_missiles(
                         transform: Transform::from_translation(transform.translation),
                         ..default()
                     },
-                    Tracking { target, speed: ammo.speed },
-                    Damage { amount: ammo.damage.amount, damage_type: ammo.damage.damage_type },
+                    Tracking {
+                        target,
+                        speed: ammo.speed,
+                    },
+                    Damage {
+                        amount: ammo.damage.amount,
+                        damage_type: ammo.damage.damage_type,
+                    },
                     Ammo,
                 ));
             }
